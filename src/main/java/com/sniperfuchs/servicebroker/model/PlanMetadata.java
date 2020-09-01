@@ -11,7 +11,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PlanMetadata {
+public class PlanMetadata
+{
     private List<String> bullets;
     private List<Costs> costs;
     private String displayName;

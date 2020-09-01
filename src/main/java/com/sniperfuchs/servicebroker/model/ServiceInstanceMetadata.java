@@ -3,11 +3,10 @@ package com.sniperfuchs.servicebroker.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
-public class MaintenanceInfo
-{
-    private String version;
-    private String description;
+public class ServiceInstanceMetadata {
+    private Map<String, String> labels;
 }

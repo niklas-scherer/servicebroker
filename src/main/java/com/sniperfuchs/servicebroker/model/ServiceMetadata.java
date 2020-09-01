@@ -9,7 +9,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ServiceMetadata {
+public class ServiceMetadata
+{
     private String displayName;
     private String imageUrl;
     private String longDescription;

@@ -8,13 +8,15 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class CatalogService {
+public class CatalogService
+{
 
     private ServiceOfferingRepository serviceOfferingRepository;
     private Logger logger = LoggerFactory.getLogger(CatalogService.class);
 
 
-    public CatalogService(ServiceOfferingRepository serviceOfferingRepository) {
+    public CatalogService(ServiceOfferingRepository serviceOfferingRepository)
+    {
         this.serviceOfferingRepository = serviceOfferingRepository;
     }
 

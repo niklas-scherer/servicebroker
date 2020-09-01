@@ -13,7 +13,8 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ServicePlan {
+public class ServicePlan
+{
     @Id
     private String id;
     private String name;
