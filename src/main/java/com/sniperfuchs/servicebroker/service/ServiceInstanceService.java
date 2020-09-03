@@ -3,7 +3,9 @@ package com.sniperfuchs.servicebroker.service;
 import com.sniperfuchs.servicebroker.controller.ProvisionResponse;
 import com.sniperfuchs.servicebroker.exception.ExistingServiceInstanceAttributeMismatchException;
 import com.sniperfuchs.servicebroker.exception.InvalidIdentifierException;
+import com.sniperfuchs.servicebroker.exception.MaintenanceConflictException;
 import com.sniperfuchs.servicebroker.exception.ServiceInstanceNotFoundException;
+import com.sniperfuchs.servicebroker.model.MaintenanceInfo;
 import com.sniperfuchs.servicebroker.model.ServiceInstance;
 import com.sniperfuchs.servicebroker.repository.ServiceInstanceRepository;
 import com.sniperfuchs.servicebroker.repository.ServiceOfferingRepository;
@@ -41,7 +43,8 @@ public class ServiceInstanceService
                                                             String plan_id,
                                                             String organization_guid,
                                                             String space_guid,
-                                                            Object parameters)
+                                                            Object parameters,
+                                                            MaintenanceInfo maintenance_info)
     {
         if(!IdentifierValidator.validate(instance_id))
         {
@@ -77,6 +80,10 @@ public class ServiceInstanceService
             throw new InvalidIdentifierException("Identifier plan_id " + plan_id + " is invalid and was not found in the catalog.");
         }
 
+        if(!serviceOfferingRepository.findById(service_id).get().getPlans().stream().filter(servicePlan -> servicePlan.getId().equals(plan_id)).findFirst().get().getMaintenance_info().getVersion().equals(maintenance_info.getVersion()))
+        {
+            throw new MaintenanceConflictException("The provided maintenance_info.version " + maintenance_info.getVersion() + "does not match with the one given by the catalog.");
+        }
 
 
 
@@ -128,29 +135,5 @@ public class ServiceInstanceService
             throw new ServiceInstanceNotFoundException("Service instance with id " + instance_id + " does not exist.");
         }
         return serviceInstanceRepository.findById(instance_id).get();
-    }
-
-    public boolean instanceAlreadyExistsWithSameAttributes(String service_id,
-                                         String plan_id,
-                                         Object context,
-                                         String organization_guid,
-                                         String space_guid,
-                                         Object parameters)
-    {
-
-        Optional<ServiceInstance> optionalServiceInstance = serviceInstanceRepository.findById(service_id);
-
-        if(optionalServiceInstance.isPresent())
-        {
-            return optionalServiceInstance.get().hasSameAttributes(ServiceInstance.builder()
-                    .service_id(service_id)
-                    .plan_id(plan_id)
-                    .organization_guid(organization_guid)
-                    .space_guid(space_guid)
-                    //.parameters(parameters) TODO:: Include parameters and context
-                    .build());
-
-        }
-        return false;
     }
 }

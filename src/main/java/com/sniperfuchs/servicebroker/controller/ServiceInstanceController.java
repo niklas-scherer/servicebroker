@@ -39,7 +39,8 @@ public class ServiceInstanceController
                 provisionRequest.getPlan_id(),
                 provisionRequest.getOrganization_guid(),
                 provisionRequest.getSpace_guid(),
-                provisionRequest.getParameters());
+                provisionRequest.getParameters(),
+                provisionRequest.getMaintenance_info());
     }
 
     @GetMapping("/v2/service_instances/{instance_id}")
