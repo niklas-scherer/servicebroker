@@ -72,7 +72,7 @@ public class ServiceInstanceService
         {
             throw new InvalidIdentifierException("Identifier service_id " + service_id + " is invalid and was not found in the catalog.");
         }
-        else if(serviceOfferingRepository.findById(service_id).get().getPlans().stream().noneMatch(servicePlan -> servicePlan.getId() == service_id))
+        else if(serviceOfferingRepository.findById(service_id).get().getPlans().stream().noneMatch(servicePlan -> servicePlan.getId().equals(service_id)))
         {
             throw new InvalidIdentifierException("Identifier plan_id " + plan_id + " is invalid and was not found in the catalog.");
         }
