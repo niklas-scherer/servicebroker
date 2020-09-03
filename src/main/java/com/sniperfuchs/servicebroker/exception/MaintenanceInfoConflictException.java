@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-public class MaintenanceConflictException extends RuntimeException
+public class MaintenanceInfoConflictException extends RuntimeException
 {
-    public MaintenanceConflictException(String message) {
+    public MaintenanceInfoConflictException(String message) {
         super(message);
     }
 }

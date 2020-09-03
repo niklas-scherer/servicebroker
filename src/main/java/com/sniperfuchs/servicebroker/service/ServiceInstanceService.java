@@ -3,7 +3,7 @@ package com.sniperfuchs.servicebroker.service;
 import com.sniperfuchs.servicebroker.controller.ProvisionResponse;
 import com.sniperfuchs.servicebroker.exception.ExistingServiceInstanceAttributeMismatchException;
 import com.sniperfuchs.servicebroker.exception.InvalidIdentifierException;
-import com.sniperfuchs.servicebroker.exception.MaintenanceConflictException;
+import com.sniperfuchs.servicebroker.exception.MaintenanceInfoConflictException;
 import com.sniperfuchs.servicebroker.exception.ServiceInstanceNotFoundException;
 import com.sniperfuchs.servicebroker.model.MaintenanceInfo;
 import com.sniperfuchs.servicebroker.model.ServiceInstance;
@@ -80,9 +80,10 @@ public class ServiceInstanceService
             throw new InvalidIdentifierException("Identifier plan_id " + plan_id + " is invalid and was not found in the catalog.");
         }
 
-        if(maintenance_info != null && !serviceOfferingRepository.findById(service_id).get().getPlans().stream().filter(servicePlan -> servicePlan.getId().equals(plan_id)).findFirst().get().getMaintenance_info().getVersion().equals(maintenance_info.getVersion()))
+        MaintenanceInfo savedMaintenanceInfo = serviceOfferingRepository.findById(service_id).get().getPlans().stream().filter(servicePlan -> servicePlan.getId().equals(plan_id)).findFirst().get().getMaintenance_info();
+        if(maintenance_info != null && savedMaintenanceInfo != null && !savedMaintenanceInfo.getVersion().equals(maintenance_info.getVersion()))
         {
-            throw new MaintenanceConflictException("The provided maintenance_info.version " + maintenance_info.getVersion() + "does not match with the one given by the catalog.");
+            throw new MaintenanceInfoConflictException("The provided maintenance_info.version " + maintenance_info.getVersion() + "does not match with the one given by the catalog.");
         }
 
 
