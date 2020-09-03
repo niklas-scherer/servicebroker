@@ -80,7 +80,7 @@ public class ServiceInstanceService
             throw new InvalidIdentifierException("Identifier plan_id " + plan_id + " is invalid and was not found in the catalog.");
         }
 
-        if(!serviceOfferingRepository.findById(service_id).get().getPlans().stream().filter(servicePlan -> servicePlan.getId().equals(plan_id)).findFirst().get().getMaintenance_info().getVersion().equals(maintenance_info.getVersion()))
+        if(maintenance_info != null && !serviceOfferingRepository.findById(service_id).get().getPlans().stream().filter(servicePlan -> servicePlan.getId().equals(plan_id)).findFirst().get().getMaintenance_info().getVersion().equals(maintenance_info.getVersion()))
         {
             throw new MaintenanceConflictException("The provided maintenance_info.version " + maintenance_info.getVersion() + "does not match with the one given by the catalog.");
         }
