@@ -33,14 +33,19 @@ public class ServiceInstanceController
     {
 
 
-
-        return new ResponseEntity(HttpStatus.OK);
+        return serviceInstanceService.createInstance(
+                instance_id,
+                provisionRequest.getService_id(),
+                provisionRequest.getPlan_id(),
+                provisionRequest.getOrganization_guid(),
+                provisionRequest.getSpace_guid(),
+                provisionRequest.getParameters());
     }
 
     @GetMapping("/v2/service_instances/{instance_id}")
     public ResponseEntity getServiceInstance(@PathVariable String instance_id)
     {
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(serviceInstanceService.fetchInstanceById(instance_id), HttpStatus.OK);
     }
 
     @PatchMapping("/v2/service_instances/{instance_id}")

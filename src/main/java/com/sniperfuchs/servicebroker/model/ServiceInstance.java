@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ServiceInstance {
     @Id
     @JsonIgnore
-    private Long id;
+    private String id;
 
     private String service_id;
     private String plan_id;
@@ -28,4 +28,14 @@ public class ServiceInstance {
     //private ServiceInstanceMetadata metadata;
 
     public ServiceInstance() {}
+
+    public boolean hasSameAttributes(ServiceInstance other)
+    {
+        if(this == other || (service_id.equals(other.service_id) && plan_id.equals(other.plan_id) && organization_guid.equals(other.organization_guid) && space_guid.equals(other.space_guid)))
+        {
+            return true;
+        }
+        //TODO: Fit context and parameters into this (maybe also metadata?)
+        return false;
+    }
 }
