@@ -29,7 +29,7 @@ public class ServiceInstanceController
     @PutMapping("/v2/service_instances/{instance_id}")
     public ResponseEntity putServiceInstance(@PathVariable String instance_id,
                                              @RequestBody ProvisionRequest provisionRequest,
-                                             @RequestParam boolean accepts_incomplete)
+                                             @RequestParam(required = false) boolean accepts_incomplete)
     {
 
 
