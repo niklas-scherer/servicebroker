@@ -79,7 +79,7 @@ public class ServicebrokerApplication
             Map<String, Object> offeringMetadata = new HashMap<>();
 
             offeringMetadata.put("provider", provider);
-            offeringMetadata.put("listing", listing);
+            //offeringMetadata.put("listing", listing);
             offeringMetadata.put("displayName", "The Fake Service Broker");
 
             ServiceOffering testOffering = ServiceOffering.builder()
