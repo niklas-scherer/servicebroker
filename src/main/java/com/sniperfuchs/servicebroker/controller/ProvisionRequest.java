@@ -3,11 +3,13 @@ package com.sniperfuchs.servicebroker.controller;
 import com.sniperfuchs.servicebroker.model.MaintenanceInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProvisionRequest
 {
     private String service_id;
