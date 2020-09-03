@@ -81,7 +81,7 @@ public class ServicebrokerApplication
             offeringMetadata.put("displayName", "The Fake Service Broker");
 
             ServiceOffering testOffering = ServiceOffering.builder()
-                    .name("TestService")
+                    .name("test-service")
                     .description("Test Description")
                     .allow_context_updates(false)
                     .bindable(true)
