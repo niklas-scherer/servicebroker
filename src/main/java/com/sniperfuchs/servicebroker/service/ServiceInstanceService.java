@@ -6,6 +6,7 @@ import com.sniperfuchs.servicebroker.exception.InvalidIdentifierException;
 import com.sniperfuchs.servicebroker.exception.ServiceInstanceNotFoundException;
 import com.sniperfuchs.servicebroker.model.ServiceInstance;
 import com.sniperfuchs.servicebroker.repository.ServiceInstanceRepository;
+import com.sniperfuchs.servicebroker.repository.ServiceOfferingRepository;
 import com.sniperfuchs.servicebroker.util.IdentifierValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,12 @@ public class ServiceInstanceService
 {
 
     private ServiceInstanceRepository serviceInstanceRepository;
+    private ServiceOfferingRepository serviceOfferingRepository;
 
-    public ServiceInstanceService(ServiceInstanceRepository serviceInstanceRepository)
+    public ServiceInstanceService(ServiceInstanceRepository serviceInstanceRepository, ServiceOfferingRepository serviceOfferingRepository)
     {
         this.serviceInstanceRepository = serviceInstanceRepository;
+        this.serviceOfferingRepository = serviceOfferingRepository;
     }
 
     public ServiceInstance fetchInstanceById(String instance_id) throws ServiceInstanceNotFoundException
@@ -65,6 +68,15 @@ public class ServiceInstanceService
             throw new InvalidIdentifierException("Identifier space_guid " + space_guid + " is null or contains reserved characters (RFC3986).");
         }
 
+        if(!serviceOfferingRepository.existsById(service_id))
+        {
+            throw new InvalidIdentifierException("Identifier service_id " + service_id + " is invalid and was not found in the catalog.");
+        }
+        else if(serviceOfferingRepository.findById(service_id).get().getPlans().stream().noneMatch(servicePlan -> servicePlan.getId() == service_id))
+        {
+            throw new InvalidIdentifierException("Identifier plan_id " + plan_id + " is invalid and was not found in the catalog.");
+        }
+
 
 
 
@@ -82,6 +94,7 @@ public class ServiceInstanceService
 
         Optional<ServiceInstance> optionalServiceInstance = serviceInstanceRepository.findById(service_id);
 
+        //TODO: maybe rewrite with existsById
         if(optionalServiceInstance.isPresent())
         {
             ServiceInstance existingServiceInstance = optionalServiceInstance.get();
