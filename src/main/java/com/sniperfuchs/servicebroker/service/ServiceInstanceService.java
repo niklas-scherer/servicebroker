@@ -77,7 +77,8 @@ public class ServiceInstanceService
                 .parameters(parameters)
                 .build();
 
-        ProvisionResponse provisionResponse = new ProvisionResponse(null, null, null);
+        //TODO remove dummy data
+        ProvisionResponse provisionResponse = new ProvisionResponse("http://example-dashboard.example.com/9189kdfsk0vfnku", "task_10", null);
 
         Optional<ServiceInstance> optionalServiceInstance = serviceInstanceRepository.findById(service_id);
 
