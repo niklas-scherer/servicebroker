@@ -17,7 +17,7 @@ public class CustomHandlerInterceptor extends HandlerInterceptorAdapter
     private Logger logger = LoggerFactory.getLogger(CustomHandlerInterceptor.class);
 
     @Value("${SUPPORTED_API_VERSION}")
-    private String supportedApiVersion = "2.16"; //TODO fix this so it reads input from config file
+    private String supportedApiVersion = "2.15"; //TODO fix this so it reads input from config file
 
     @Override
     public boolean preHandle(HttpServletRequest request,

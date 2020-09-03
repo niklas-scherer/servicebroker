@@ -22,9 +22,9 @@ public class ServicePlan
     private PlanMetadata metadata;
     private boolean free;
     private boolean bindable;
-    private boolean binding_rotatable;
+    //private boolean binding_rotatable;
     private boolean plan_updateable;
     private Schemas schemas;
     private int maximum_polling_duration;
-    private MaintenanceInfo maintenanceInfo;
+    private MaintenanceInfo maintenance_info;
 }

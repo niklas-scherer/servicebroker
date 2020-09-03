@@ -53,7 +53,7 @@ public class ServicebrokerApplication
                     .name("fake-plan-1")
                     .description("Shared fake Server, 5tb persistent disk, 40 max concurrent connections.")
                     .free(false)
-                    .maintenanceInfo(maintenanceInfo)
+                    .maintenance_info(maintenanceInfo)
                     .metadata(planMetadata1)
                     .build();
 
