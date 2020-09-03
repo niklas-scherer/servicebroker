@@ -50,6 +50,7 @@ public class ServicebrokerApplication
             //TODO add schemas
 
             ServicePlan fakePlan1 = ServicePlan.builder()
+                    .id("test-plan-id1")
                     .name("fake-plan-1")
                     .description("Shared fake Server, 5tb persistent disk, 40 max concurrent connections.")
                     .free(false)
@@ -58,6 +59,7 @@ public class ServicebrokerApplication
                     .build();
 
             ServicePlan fakePlan2 = ServicePlan.builder()
+                    .id("test-plan-id2")
                     .name("fake-plan-1")
                     .description("Shared fake Server, 5tb persistent disk, 40 max concurrent connections. 100 async.")
                     .free(false)
