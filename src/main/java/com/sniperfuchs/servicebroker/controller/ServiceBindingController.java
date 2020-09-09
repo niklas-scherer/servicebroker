@@ -44,8 +44,11 @@ public class ServiceBindingController
 
     @DeleteMapping("/v2/service_instances/{instance_id}/service_bindings/{binding_id}")
     public ResponseEntity deleteServiceBinding(@PathVariable String instance_id,
-                                               @PathVariable String binding_id)
+                                               @PathVariable String binding_id,
+                                               @RequestParam String service_id,
+                                               @RequestParam String plan_id,
+                                               @RequestParam(required = false) boolean accepts_incomplete)
     {
-        return new ResponseEntity(HttpStatus.OK);
+        return serviceBindingService.deleteBinding(instance_id, binding_id, service_id, plan_id);
     }
 }
