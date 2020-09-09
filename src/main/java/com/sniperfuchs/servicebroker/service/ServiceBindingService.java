@@ -1,5 +1,6 @@
 package com.sniperfuchs.servicebroker.service;
 
+import com.sniperfuchs.servicebroker.controller.BindFetchResponse;
 import com.sniperfuchs.servicebroker.controller.BindResponse;
 import com.sniperfuchs.servicebroker.exception.ExistingServiceBindingAttributeMismatchException;
 import com.sniperfuchs.servicebroker.exception.InvalidIdentifierException;
@@ -23,13 +24,18 @@ public class ServiceBindingService
         this.serviceBindingRepository = serviceBindingRepository;
     }
 
-    public ServiceBinding fetchBindingById(String binding_id)
+    public ResponseEntity fetchBindingById(String binding_id)
     {
         if(serviceBindingRepository.findById(binding_id).isEmpty())
         {
             throw new ServiceBindingNotFoundException("Binding with id " + binding_id + " not found.");
         }
-        return new ServiceBinding();
+
+        BindFetchResponse response = BindFetchResponse.builder()
+                .syslog_drain_url("TestURL")
+                .build();
+
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     public ResponseEntity createBinding(String instance_id,

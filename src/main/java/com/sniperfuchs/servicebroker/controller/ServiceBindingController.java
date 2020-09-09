@@ -38,8 +38,7 @@ public class ServiceBindingController
     public ResponseEntity getServiceBinding(@PathVariable String instance_id,
                                             @PathVariable String binding_id)
     {
-        serviceBindingService.fetchBindingById(binding_id);
-        return new ResponseEntity(HttpStatus.OK);
+        return serviceBindingService.fetchBindingById(binding_id);
     }
 
     @DeleteMapping("/v2/service_instances/{instance_id}/service_bindings/{binding_id}")
