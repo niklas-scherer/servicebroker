@@ -1,12 +1,10 @@
 package com.sniperfuchs.servicebroker.service;
 
 import com.sniperfuchs.servicebroker.controller.ProvisionResponse;
-import com.sniperfuchs.servicebroker.exception.ExistingServiceInstanceAttributeMismatchException;
-import com.sniperfuchs.servicebroker.exception.InvalidIdentifierException;
-import com.sniperfuchs.servicebroker.exception.MaintenanceInfoConflictException;
-import com.sniperfuchs.servicebroker.exception.ServiceInstanceNotFoundException;
+import com.sniperfuchs.servicebroker.exception.*;
 import com.sniperfuchs.servicebroker.model.MaintenanceInfo;
 import com.sniperfuchs.servicebroker.model.ServiceInstance;
+import com.sniperfuchs.servicebroker.model.ServicePlan;
 import com.sniperfuchs.servicebroker.repository.ServiceInstanceRepository;
 import com.sniperfuchs.servicebroker.repository.ServiceOfferingRepository;
 import com.sniperfuchs.servicebroker.util.IdentifierValidator;
@@ -20,8 +18,8 @@ import java.util.Optional;
 public class ServiceInstanceService
 {
 
-    private ServiceInstanceRepository serviceInstanceRepository;
-    private ServiceOfferingRepository serviceOfferingRepository;
+    private final ServiceInstanceRepository serviceInstanceRepository;
+    private final ServiceOfferingRepository serviceOfferingRepository;
 
     public ServiceInstanceService(ServiceInstanceRepository serviceInstanceRepository, ServiceOfferingRepository serviceOfferingRepository)
     {
@@ -83,9 +81,25 @@ public class ServiceInstanceService
         MaintenanceInfo savedMaintenanceInfo = serviceOfferingRepository.findById(service_id).get().getPlans().stream().filter(servicePlan -> servicePlan.getId().equals(plan_id)).findFirst().get().getMaintenance_info();
         if(maintenance_info != null && savedMaintenanceInfo != null && !savedMaintenanceInfo.getVersion().equals(maintenance_info.getVersion()))
         {
-            throw new MaintenanceInfoConflictException("The provided maintenance_info.version " + maintenance_info.getVersion() + "does not match with the one given by the catalog.");
+            throw new MaintenanceInfoConflictException("The provided maintenance_info.version " + maintenance_info.getVersion() + "does not match the one given by the catalog.");
         }
 
+        for (ServicePlan plan : serviceOfferingRepository.findById(service_id).get().getPlans())
+        {
+            if(plan.getId().equals(plan_id))
+            {
+                savedMaintenanceInfo = plan.getMaintenance_info();
+            }
+        }
+
+        if(savedMaintenanceInfo == null) {
+            System.out.println("MAINTENANCEINFO NULL");
+        }
+
+        if(savedMaintenanceInfo != null && maintenance_info != null && !savedMaintenanceInfo.getVersion().equals(maintenance_info.getVersion()))
+        {
+            throw new MaintenanceInfoConflictException("Test");
+        }
 
 
         ServiceInstance serviceInstance = ServiceInstance.builder()
@@ -127,6 +141,27 @@ public class ServiceInstanceService
 
 
         return new ResponseEntity<>(provisionResponse, HttpStatus.CREATED);
+    }
+
+    public void deleteInstance(String instance_id,
+                               String service_id,
+                               String plan_id)
+    {
+        if(instance_id == null || instance_id.isEmpty()
+                || service_id == null || service_id.isEmpty()
+                || plan_id == null || plan_id.isEmpty()
+                || !IdentifierValidator.validate(instance_id)
+                || !IdentifierValidator.validate(service_id)
+                || !IdentifierValidator.validate(plan_id))
+        {
+            throw new InvalidIdentifierException(("Identifiers not valid."));
+            //TODO: Split into 3 for each identifier
+        }
+
+        if(serviceInstanceRepository.findById(instance_id).isEmpty())
+        {
+            throw new ServiceInstanceGoneException("Service instance with id " + instance_id + " is gone.");
+        }
     }
 
     public ServiceInstance updateInstanceById(String instance_id)

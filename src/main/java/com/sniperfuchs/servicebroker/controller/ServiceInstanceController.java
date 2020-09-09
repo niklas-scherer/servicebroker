@@ -56,8 +56,12 @@ public class ServiceInstanceController
     }
 
     @DeleteMapping("/v2/service_instances/{instance_id}")
-    public ResponseEntity deleteServiceInstance(@PathVariable String instance_id)
+    public ResponseEntity deleteServiceInstance(@PathVariable String instance_id,
+                                                @RequestParam String service_id,
+                                                @RequestParam String plan_id,
+                                                @RequestParam(required = false) boolean accepts_incomplete)
     {
+        serviceInstanceService.deleteInstance(instance_id, service_id, plan_id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
