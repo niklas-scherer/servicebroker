@@ -35,7 +35,7 @@ public class ServiceInstance {
         {
             return true;
         }
-        //TODO: Fit context and parameters into this (maybe also metadata?)
+        //TODO: Fit context and parameters into this (maybe also metadata?) and maybe exclude id?
         return false;
     }
 }

@@ -54,6 +54,7 @@ public class ServicebrokerApplication
                     .name("fake-plan-1")
                     .description("Shared fake Server, 5tb persistent disk, 40 max concurrent connections.")
                     .free(false)
+                    .bindable(true)
                     .maintenance_info(maintenanceInfo)
                     .metadata(planMetadata1)
                     .build();
@@ -63,6 +64,7 @@ public class ServicebrokerApplication
                     .name("fake-plan-1")
                     .description("Shared fake Server, 5tb persistent disk, 40 max concurrent connections. 100 async.")
                     .free(false)
+                    .bindable(true)
                     .maintenance_info(maintenanceInfo)
                     .build();
 

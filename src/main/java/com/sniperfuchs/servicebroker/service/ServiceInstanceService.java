@@ -84,22 +84,6 @@ public class ServiceInstanceService
             throw new MaintenanceInfoConflictException("The provided maintenance_info.version " + maintenance_info.getVersion() + "does not match the one given by the catalog.");
         }
 
-        for (ServicePlan plan : serviceOfferingRepository.findById(service_id).get().getPlans())
-        {
-            if(plan.getId().equals(plan_id))
-            {
-                savedMaintenanceInfo = plan.getMaintenance_info();
-            }
-        }
-
-        if(savedMaintenanceInfo == null) {
-            System.out.println("MAINTENANCEINFO NULL");
-        }
-
-        if(savedMaintenanceInfo != null && maintenance_info != null && !savedMaintenanceInfo.getVersion().equals(maintenance_info.getVersion()))
-        {
-            throw new MaintenanceInfoConflictException("Test");
-        }
 
 
         ServiceInstance serviceInstance = ServiceInstance.builder()
@@ -114,7 +98,7 @@ public class ServiceInstanceService
         //TODO remove dummy data
         ProvisionResponse provisionResponse = new ProvisionResponse("http://example-dashboard.example.com/9189kdfsk0vfnku", "task_10", null);
 
-        Optional<ServiceInstance> optionalServiceInstance = serviceInstanceRepository.findById(service_id);
+        Optional<ServiceInstance> optionalServiceInstance = serviceInstanceRepository.findById(instance_id);
 
         //TODO: maybe rewrite with existsById
         if(optionalServiceInstance.isPresent())
@@ -126,7 +110,7 @@ public class ServiceInstanceService
             }
             else
             {
-                throw new ExistingServiceInstanceAttributeMismatchException("A service instance with this instance_id but different attributes already exists.");
+                throw new ExistingServiceInstanceAttributeMismatchException("A service instance with instance_id " + instance_id + " already exists with different attributes.");
             }
         }
 
@@ -162,6 +146,9 @@ public class ServiceInstanceService
         {
             throw new ServiceInstanceGoneException("Service instance with id " + instance_id + " is gone.");
         }
+
+        serviceInstanceRepository.deleteById(instance_id);
+        //TODO return something to check if delete was successful?
     }
 
     public ServiceInstance updateInstanceById(String instance_id)
