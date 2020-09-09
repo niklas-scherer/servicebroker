@@ -5,6 +5,7 @@ import com.sniperfuchs.servicebroker.exception.ExistingServiceBindingAttributeMi
 import com.sniperfuchs.servicebroker.exception.InvalidIdentifierException;
 import com.sniperfuchs.servicebroker.exception.ServiceBindingGoneException;
 import com.sniperfuchs.servicebroker.exception.ServiceBindingNotFoundException;
+import com.sniperfuchs.servicebroker.model.BindResource;
 import com.sniperfuchs.servicebroker.model.ServiceBinding;
 import com.sniperfuchs.servicebroker.repository.ServiceBindingRepository;
 import com.sniperfuchs.servicebroker.util.IdentifierValidator;
@@ -34,7 +35,9 @@ public class ServiceBindingService
     public ResponseEntity createBinding(String instance_id,
                                         String binding_id,
                                         String service_id,
-                                        String plan_id)
+                                        String plan_id,
+                                        String app_guid,
+                                        BindResource bind_resource)
     {
         if(instance_id == null || instance_id.isEmpty() || !IdentifierValidator.validate(instance_id))
         {
@@ -58,6 +61,8 @@ public class ServiceBindingService
 
         ServiceBinding serviceBinding = ServiceBinding.builder()
                 .id(binding_id)
+                .app_guid(app_guid)
+                .bind_resource(bind_resource)
                 .build();
 
 
@@ -86,22 +91,22 @@ public class ServiceBindingService
     {
         if(instance_id == null || instance_id.isEmpty() || !IdentifierValidator.validate(instance_id))
         {
-            throw new InvalidIdentifierException("Identifier instance_id: " + instance_id + " is invalid.");
+            throw new ServiceBindingGoneException("Identifier instance_id: " + instance_id + " is invalid.");
         }
 
         if(binding_id == null || binding_id.isEmpty() || !IdentifierValidator.validate(binding_id))
         {
-            throw new InvalidIdentifierException("Identifier binding_id: " + binding_id + " is invalid.");
+            throw new ServiceBindingGoneException("Identifier binding_id: " + binding_id + " is invalid.");
         }
 
         if(service_id == null || service_id.isEmpty() || !IdentifierValidator.validate(service_id))
         {
-            throw new InvalidIdentifierException("Identifier service_id: " + service_id + " is invalid.");
+            throw new ServiceBindingGoneException("Identifier service_id: " + service_id + " is invalid.");
         }
 
         if(plan_id == null || plan_id.isEmpty() || !IdentifierValidator.validate(plan_id))
         {
-            throw new InvalidIdentifierException("Identifier plan_id: " + plan_id + " is invalid.");
+            throw new ServiceBindingGoneException("Identifier plan_id: " + plan_id + " is invalid.");
         }
 
         if(serviceBindingRepository.findById(binding_id).isEmpty())

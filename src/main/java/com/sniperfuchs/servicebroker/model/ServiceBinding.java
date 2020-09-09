@@ -23,15 +23,28 @@ public class ServiceBinding {
     private String syslog_drain_url;
     private String route_service_url;
     //TODO volume mounts
-    private Map<String, Object> parameters = new HashMap<>();
+    private Map<String, Object> parameters;
     //TODO endpoints
+
+    private String app_guid;
+    private BindResource bind_resource;
 
     public boolean hasSameAttributes(ServiceBinding other)
     {
-        if(id.equals(other.id) && parameters.equals(other.parameters))
+        if(!id.equals(other.id))
         {
-            return true;
+            return false;
         }
-        return false; //TODO fix this
+
+        if(parameters != null && !parameters.equals(other.parameters))
+        {
+            return false;
+        }
+
+        if(app_guid != null && !app_guid.equals(other.app_guid))
+        {
+            return false;
+        }
+        return true;
     }
 }

@@ -31,7 +31,7 @@ public class ServiceBindingController
                                             @RequestBody BindRequest request,
                                             @RequestParam(required = false) boolean accepts_incomplete)
     {
-        return serviceBindingService.createBinding(instance_id, binding_id, request.getService_id(), request.getPlan_id());
+        return serviceBindingService.createBinding(instance_id, binding_id, request.getService_id(), request.getPlan_id(), request.getApp_guid(), request.getBind_resource());
     }
 
     @GetMapping("/v2/service_instances/{instance_id}/service_bindings/{binding_id}")
