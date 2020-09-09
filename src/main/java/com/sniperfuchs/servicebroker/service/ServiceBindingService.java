@@ -63,6 +63,8 @@ public class ServiceBindingService
                 .id(binding_id)
                 .app_guid(app_guid)
                 .bind_resource(bind_resource)
+                .plan_id(plan_id)
+                .service_id(service_id)
                 .build();
 
 
