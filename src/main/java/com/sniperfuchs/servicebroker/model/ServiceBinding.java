@@ -29,6 +29,9 @@ public class ServiceBinding {
     private String app_guid;
     private BindResource bind_resource;
 
+    private String service_id;
+    private String plan_id;
+
     public boolean hasSameAttributes(ServiceBinding other)
     {
         if(!id.equals(other.id))
@@ -42,6 +45,16 @@ public class ServiceBinding {
         }
 
         if(app_guid != null && !app_guid.equals(other.app_guid))
+        {
+            return false;
+        }
+
+        if(service_id != null && !service_id.equals(other.service_id))
+        {
+            return false;
+        }
+
+        if(plan_id != null && !plan_id.equals(other.plan_id))
         {
             return false;
         }
