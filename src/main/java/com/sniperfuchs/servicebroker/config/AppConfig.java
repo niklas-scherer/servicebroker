@@ -33,27 +33,23 @@ import java.util.List;
 @Configuration
 @EnableWebMvc
 @EnableWebSecurity
-public class AppConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer
-{ //TODO: Split into multiple configurations cause this is getting messy
+public class AppConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer { //TODO: Split into multiple configurations cause this is getting messy
 
     // Header interceptor
     @Override
-    public void addInterceptors(InterceptorRegistry registry)
-    {
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new CustomHandlerInterceptor()).addPathPatterns("/v2/**").excludePathPatterns("/v2/api-docs");
     }
 
     // Basic authentification
 
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception
-    {
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("user").password(passwordEncoder().encode("password")).roles("USER");
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
+    protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/v2/catalog", "/v2/service_instances/**").authenticated()
@@ -75,8 +71,7 @@ public class AppConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     // Swagger configuration
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry)
-    {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         registry
                 .addResourceHandler("swagger-ui.html")
@@ -88,8 +83,7 @@ public class AppConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     }
 
     @Bean
-    public Docket apiDocket()
-    {
+    public Docket apiDocket() {
 
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(getApiInfo())
@@ -99,8 +93,7 @@ public class AppConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
                 .build().globalOperationParameters(operationParameters());
     }
 
-    private ApiInfo getApiInfo()
-    {
+    private ApiInfo getApiInfo() {
 
         return new ApiInfoBuilder()
                 .title("API Doc for implementation of Open Service Broker")

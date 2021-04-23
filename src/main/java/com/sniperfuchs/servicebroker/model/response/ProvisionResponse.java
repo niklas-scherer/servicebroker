@@ -1,4 +1,4 @@
-package com.sniperfuchs.servicebroker.controller;
+package com.sniperfuchs.servicebroker.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sniperfuchs.servicebroker.model.ServiceInstanceMetadata;

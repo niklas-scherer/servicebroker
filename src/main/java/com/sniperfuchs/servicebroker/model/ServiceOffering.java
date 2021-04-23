@@ -17,8 +17,7 @@ import java.util.Map;
 @Builder
 @Document
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ServiceOffering
-{
+public class ServiceOffering {
     private String name;
 
     @Id

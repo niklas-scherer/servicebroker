@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Catalog
-{
+public class Catalog {
+
     private List<ServiceOffering> services;
 }

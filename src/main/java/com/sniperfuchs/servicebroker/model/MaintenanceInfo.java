@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MaintenanceInfo
-{
+public class MaintenanceInfo {
     private String version;
     private String description;
 }

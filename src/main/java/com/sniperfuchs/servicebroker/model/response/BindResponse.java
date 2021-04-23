@@ -1,4 +1,4 @@
-package com.sniperfuchs.servicebroker.controller;
+package com.sniperfuchs.servicebroker.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -9,8 +9,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class BindResponse
-{
+public class BindResponse {
     private Map<String, Object> credentials;
     private String syslog_drain_url = "Test";
     private String route_service_url;

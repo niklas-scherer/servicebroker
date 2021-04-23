@@ -1,4 +1,4 @@
-package com.sniperfuchs.servicebroker.controller;
+package com.sniperfuchs.servicebroker.model.request;
 
 import com.sniperfuchs.servicebroker.model.MaintenanceInfo;
 import lombok.AllArgsConstructor;
@@ -10,8 +10,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProvisionRequest
-{
+public class ProvisionRequest {
     private String service_id;
     private  String plan_id;
     private Map<String, String> context;

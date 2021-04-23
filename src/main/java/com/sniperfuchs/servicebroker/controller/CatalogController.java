@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CatalogController {
 
-    private CatalogService catalogService;
+    private final CatalogService catalogService;
 
     public CatalogController(CatalogService catalogService) {
         this.catalogService = catalogService;

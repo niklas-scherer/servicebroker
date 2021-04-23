@@ -9,8 +9,8 @@ import java.util.Map;
 @Builder
 @Data
 @AllArgsConstructor
-public class Costs
-{
+public class Costs {
+
     private Map<String, Double> amount;
     private String unit;
 }

@@ -15,8 +15,7 @@ import java.util.Map;
 
 @SpringBootApplication
 @EnableSwagger2
-public class ServicebrokerApplication
-{
+public class ServicebrokerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ServicebrokerApplication.class, args);
@@ -24,8 +23,7 @@ public class ServicebrokerApplication
 
 
     @Bean
-    CommandLineRunner commandLineRunner(ServiceOfferingRepository serviceOfferingRepository)
-    {
+    CommandLineRunner commandLineRunner(ServiceOfferingRepository serviceOfferingRepository) {
         return args -> {
             // Clearing DB
             serviceOfferingRepository.deleteAll();

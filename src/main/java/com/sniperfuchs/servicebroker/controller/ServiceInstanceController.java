@@ -1,18 +1,17 @@
 package com.sniperfuchs.servicebroker.controller;
 
+import com.sniperfuchs.servicebroker.model.request.ProvisionRequest;
 import com.sniperfuchs.servicebroker.service.ServiceInstanceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class ServiceInstanceController
-{
+public class ServiceInstanceController {
 
-    private ServiceInstanceService serviceInstanceService;
+    private final ServiceInstanceService serviceInstanceService;
 
-    public ServiceInstanceController(ServiceInstanceService serviceInstanceService)
-    {
+    public ServiceInstanceController(ServiceInstanceService serviceInstanceService) {
         this.serviceInstanceService = serviceInstanceService;
     }
 
@@ -20,8 +19,8 @@ public class ServiceInstanceController
     public ResponseEntity getLastOperation(@PathVariable String instance_id,
                                            @RequestParam String service_id,
                                            @RequestParam String plan_id,
-                                           @RequestParam String operation)
-    {
+                                           @RequestParam String operation) {
+
         //TODO implement method
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -29,8 +28,7 @@ public class ServiceInstanceController
     @PutMapping("/v2/service_instances/{instance_id}")
     public ResponseEntity putServiceInstance(@PathVariable String instance_id,
                                              @RequestBody ProvisionRequest provisionRequest,
-                                             @RequestParam(required = false) boolean accepts_incomplete)
-    {
+                                             @RequestParam(required = false) boolean accepts_incomplete) {
 
 
         return serviceInstanceService.createInstance(
@@ -44,14 +42,13 @@ public class ServiceInstanceController
     }
 
     @GetMapping("/v2/service_instances/{instance_id}")
-    public ResponseEntity getServiceInstance(@PathVariable String instance_id)
-    {
+    public ResponseEntity getServiceInstance(@PathVariable String instance_id) {
+
         return new ResponseEntity(serviceInstanceService.fetchInstanceById(instance_id), HttpStatus.OK);
     }
 
     @PatchMapping("/v2/service_instances/{instance_id}")
-    public ResponseEntity patchServiceInstance(@PathVariable String instance_id)
-    {
+    public ResponseEntity patchServiceInstance(@PathVariable String instance_id) {
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -59,8 +56,8 @@ public class ServiceInstanceController
     public ResponseEntity deleteServiceInstance(@PathVariable String instance_id,
                                                 @RequestParam String service_id,
                                                 @RequestParam String plan_id,
-                                                @RequestParam(required = false) boolean accepts_incomplete)
-    {
+                                                @RequestParam(required = false) boolean accepts_incomplete) {
+
         serviceInstanceService.deleteInstance(instance_id, service_id, plan_id);
         return new ResponseEntity(HttpStatus.OK);
     }
