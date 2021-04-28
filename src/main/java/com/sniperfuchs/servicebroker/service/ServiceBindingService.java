@@ -31,6 +31,8 @@ public class ServiceBindingService {
                 .syslog_drain_url("TestURL")
                 .build();
 
+        // TODO: Proper response
+
         return new ResponseEntity(response, HttpStatus.OK);
     }
 

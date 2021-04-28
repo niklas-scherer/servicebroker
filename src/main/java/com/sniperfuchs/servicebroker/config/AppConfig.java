@@ -1,6 +1,8 @@
 package com.sniperfuchs.servicebroker.config;
 
 import com.sniperfuchs.servicebroker.repository.ServiceOfferingRepository;
+import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -66,7 +68,6 @@ public class AppConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     // Swagger configuration
 

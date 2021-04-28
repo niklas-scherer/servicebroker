@@ -1,5 +1,7 @@
 package com.sniperfuchs.servicebroker.service;
 
+import com.sniperfuchs.servicebroker.deployment.Fabric8ReleaseManager;
+import com.sniperfuchs.servicebroker.deployment.ReleaseManager;
 import com.sniperfuchs.servicebroker.model.response.ProvisionResponse;
 import com.sniperfuchs.servicebroker.exception.*;
 import com.sniperfuchs.servicebroker.model.MaintenanceInfo;
@@ -59,6 +61,7 @@ public class ServiceInstanceService {
             throw new InvalidIdentifierException("Identifier space_guid " + space_guid + " is null or contains reserved characters (RFC3986).");
         }
 
+        // TODO: these things should happen in the catalog service
         if(!serviceOfferingRepository.existsById(service_id)) {
             throw new InvalidIdentifierException("Identifier service_id " + service_id + " is invalid and was not found in the catalog.");
         }
@@ -102,6 +105,10 @@ public class ServiceInstanceService {
 
         //TODO Populate instance with parameters
         //TODO Deploy service on kubernetes cluster with HELM, maybe in different service
+
+        ReleaseManager releaseManager = new Fabric8ReleaseManager();
+
+        //TODO: Deploy with release manager
 
 
         serviceInstanceRepository.save(serviceInstance);
