@@ -1,5 +1,6 @@
 package com.sniperfuchs.servicebroker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,4 +27,7 @@ public class ServicePlan {
     private Schemas schemas;
     private int maximum_polling_duration;
     private MaintenanceInfo maintenance_info;
+
+    @JsonIgnore
+    private String filePath;
 }

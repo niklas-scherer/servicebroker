@@ -55,16 +55,11 @@ public class ServicebrokerApplication {
                     .bindable(true)
                     .maintenance_info(maintenanceInfo)
                     .metadata(planMetadata1)
+                    .filePath("/home/niklas/deploy-nginx.yaml")
                     .build();
 
-            ServicePlan fakePlan2 = ServicePlan.builder()
-                    .id("test-plan-id2")
-                    .name("fake-plan-1")
-                    .description("Shared fake Server, 5tb persistent disk, 40 max concurrent connections. 100 async.")
-                    .free(false)
-                    .bindable(true)
-                    .maintenance_info(maintenanceInfo)
-                    .build();
+
+
 
 
 
@@ -93,7 +88,7 @@ public class ServicebrokerApplication {
                     .tags(List.of("no-sql", "relational"))
                     .requires(List.of("route_forwarding"))
                     .metadata(offeringMetadata)
-                    .plans(List.of(fakePlan1, fakePlan2))
+                    .plans(List.of(fakePlan1))
                     .build();
 
             serviceOfferingRepository.save(testOffering);

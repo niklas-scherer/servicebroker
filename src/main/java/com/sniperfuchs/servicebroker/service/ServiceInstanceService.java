@@ -1,7 +1,7 @@
 package com.sniperfuchs.servicebroker.service;
 
-import com.sniperfuchs.servicebroker.deployment.Fabric8ReleaseManager;
 import com.sniperfuchs.servicebroker.deployment.ReleaseManager;
+import com.sniperfuchs.servicebroker.model.ServicePlan;
 import com.sniperfuchs.servicebroker.model.response.ProvisionResponse;
 import com.sniperfuchs.servicebroker.exception.*;
 import com.sniperfuchs.servicebroker.model.MaintenanceInfo;
@@ -9,10 +9,14 @@ import com.sniperfuchs.servicebroker.model.ServiceInstance;
 import com.sniperfuchs.servicebroker.repository.ServiceInstanceRepository;
 import com.sniperfuchs.servicebroker.repository.ServiceOfferingRepository;
 import com.sniperfuchs.servicebroker.util.IdentifierValidator;
+import io.fabric8.kubernetes.api.model.HasMetadata;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,10 +24,12 @@ public class ServiceInstanceService {
 
     private final ServiceInstanceRepository serviceInstanceRepository;
     private final ServiceOfferingRepository serviceOfferingRepository;
+    private final ReleaseManager releaseManager;
 
-    public ServiceInstanceService(ServiceInstanceRepository serviceInstanceRepository, ServiceOfferingRepository serviceOfferingRepository) {
+    public ServiceInstanceService(ServiceInstanceRepository serviceInstanceRepository, ServiceOfferingRepository serviceOfferingRepository, ReleaseManager releaseManager) {
         this.serviceInstanceRepository = serviceInstanceRepository;
         this.serviceOfferingRepository = serviceOfferingRepository;
+        this.releaseManager = releaseManager;
     }
 
     public ServiceInstance fetchInstanceById(String instance_id) throws ServiceInstanceNotFoundException {
@@ -62,6 +68,8 @@ public class ServiceInstanceService {
         }
 
         // TODO: these things should happen in the catalog service
+
+
         if(!serviceOfferingRepository.existsById(service_id)) {
             throw new InvalidIdentifierException("Identifier service_id " + service_id + " is invalid and was not found in the catalog.");
         }
@@ -106,9 +114,20 @@ public class ServiceInstanceService {
         //TODO Populate instance with parameters
         //TODO Deploy service on kubernetes cluster with HELM, maybe in different service
 
-        ReleaseManager releaseManager = new Fabric8ReleaseManager();
 
         //TODO: Deploy with release manager
+
+
+        ServicePlan plan = serviceOfferingRepository.findById(service_id).get().getPlans().stream().filter(servicePlan -> servicePlan.getId().equals(plan_id)).findFirst().get();
+        URI uri = Paths.get(plan.getFilePath()).toUri();
+        List<HasMetadata> metadataList = null;
+        releaseManager.install(uri);
+        serviceInstance.setKubernetesMetadata(metadataList);
+
+        //TODO: Create yaml file so it's always available locally. This makes it impossible to not find the resource for uninstalling
+        // if the resource was pulled form an online repository for the install
+
+        serviceInstance.setFilePath(plan.getFilePath());
 
 
         serviceInstanceRepository.save(serviceInstance);
@@ -132,9 +151,14 @@ public class ServiceInstanceService {
             //TODO: Split into 3 for each identifier
         }
 
+        //TODO: Check if this is fine or existsById is better
         if(serviceInstanceRepository.findById(instance_id).isEmpty()) {
             throw new ServiceInstanceGoneException("Service instance with id " + instance_id + " is gone.");
         }
+
+
+        releaseManager.uninstall(serviceInstanceRepository.findById(instance_id).get().getFilePath());
+
 
         serviceInstanceRepository.deleteById(instance_id);
         //TODO return something to check if delete was successful?
@@ -144,6 +168,8 @@ public class ServiceInstanceService {
         if(serviceInstanceRepository.findById(instance_id).isEmpty()) {
             throw new ServiceInstanceNotFoundException("Service instance with id " + instance_id + " does not exist.");
         }
+
+        //TODO: Do proper updating
         return serviceInstanceRepository.findById(instance_id).get();
     }
 }

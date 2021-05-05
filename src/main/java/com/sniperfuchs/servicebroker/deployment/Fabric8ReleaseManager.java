@@ -3,6 +3,8 @@ package com.sniperfuchs.servicebroker.deployment;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -14,8 +16,10 @@ import java.util.List;
 @Service
 public class Fabric8ReleaseManager implements ReleaseManager {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(Fabric8ReleaseManager.class);
+
     @Override
-    public void install(URI resource) {
+    public List<HasMetadata> install(URI resource) {
         /*
             General idea:
                 - Kubernetes YAML files are stored somewhere (locally or in some online repo)
@@ -25,6 +29,7 @@ public class Fabric8ReleaseManager implements ReleaseManager {
          */
 
         File resourceFile = null;
+        List<HasMetadata> metadataList = null;
 
         if(resource.getScheme().equals("file")) {
             resourceFile = new File(resource);
@@ -34,9 +39,28 @@ public class Fabric8ReleaseManager implements ReleaseManager {
         }
 
         try(KubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
-            List<HasMetadata> metadataList = kubernetesClient.load(new FileInputStream(resourceFile)).createOrReplace();
+            metadataList = kubernetesClient
+                    .load(new FileInputStream(resourceFile))
+                    .createOrReplace();
+            LOGGER.info("Applied {} items.", metadataList.size());
         } catch (FileNotFoundException e) { // TODO: Or throw and use exception handler
-            e.printStackTrace();
+            LOGGER.error("Error while opening YAML file for Kubernetes resource creation", e);
         }
+
+        return metadataList;
+    }
+
+    @Override
+    public void uninstall(String filePath) {
+
+        try(KubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
+            boolean result = kubernetesClient
+                    .load(new FileInputStream(filePath))
+                    .delete();
+            LOGGER.info("Deleted: {}", result);
+        } catch (FileNotFoundException e) {
+            LOGGER.error("Error while opening YAML file for Kubernetes resource deletion", e);
+        }
+
     }
 }
