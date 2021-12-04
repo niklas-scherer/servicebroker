@@ -1,6 +1,10 @@
 package com.sniperfuchs.servicebroker.config;
 
+import com.sniperfuchs.servicebroker.deployment.Fabric8ReleaseManager;
+import com.sniperfuchs.servicebroker.deployment.ReleaseManager;
 import com.sniperfuchs.servicebroker.repository.ServiceOfferingRepository;
+import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -67,6 +71,11 @@ public class AppConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public ReleaseManager releaseManager() {
+        return new Fabric8ReleaseManager();
+    }
+    //TODO: Maybe don't declare as bean but as component
 
     // Swagger configuration
 
@@ -108,7 +117,7 @@ public class AppConfig extends WebSecurityConfigurerAdapter implements WebMvcCon
         headers.add(new ParameterBuilder().name("X-Broker-API-Version")
                 .description("API version that should be used")
                 .modelRef(new ModelRef("string")).parameterType("header")
-                .required(true).defaultValue("2.16").build());
+                .required(true).defaultValue("2.16").build()); //TODO: Change default value to what's defined in application properties
 
         headers.add(new ParameterBuilder().name("Authorization")
                 .modelRef(new ModelRef("string")).parameterType("header")

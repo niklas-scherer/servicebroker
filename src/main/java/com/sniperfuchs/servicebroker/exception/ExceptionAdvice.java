@@ -28,4 +28,5 @@ public class ExceptionAdvice {
         return result;
     }
 
+    //TODO: Maybe use advice for everything so it can get logged as well
 }
